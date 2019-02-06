@@ -1,0 +1,7 @@
+dependencies:
+  pre:
+    - sudo apt-get install clang-3.4
+
+test:
+  override:
+    - bin/test.sh
