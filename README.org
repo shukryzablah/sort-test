@@ -1,0 +1,32 @@
+* Sort Test
+
+A command line utility to run a variety of sorting algorithms with a
+variety of options.
+
+To compile:
+
+#+BEGIN_SRC shell :results silent
+gcc sorttest.c -o sorttest
+#+END_SRC
+
+Now we can do a test run. Let's run selection sort on a random array
+of 20 values ranging from 0 to 50 once.
+
+#+BEGIN_SRC shell :results silent
+./sorttest selection 20 50 1
+#+END_SRC
+
+Go ahead and try using the time command to get a rough estimate about
+how much slower selection sort is than merge sort for an array of
+10000 values.
+
+#+BEGIN_SRC shell :results silent
+time ./sorttest merge 20000 100 1 
+#+END_SRC
+
+
+
+
+
+
+

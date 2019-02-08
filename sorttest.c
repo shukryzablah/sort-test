@@ -44,12 +44,6 @@ int main(int argc, char *argv[]) {
     printf("Sorting algorithm not supported.\n");
     exit(1);
   }
-
-  printf("Finished sorting.\n");
-
-  for(int i = 0; i < arr_length; i++) {
-    
-  }
  
   return 0;
 }
