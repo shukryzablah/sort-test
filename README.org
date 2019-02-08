@@ -18,11 +18,17 @@ of 20 values ranging from 0 to 50 once.
 
 Go ahead and try using the time command to get a rough estimate about
 how much slower selection sort is than merge sort for an array of
-10000 values.
+20000 values.
 
 #+BEGIN_SRC shell :results silent
+time ./sorttest selection 20000 100 1
 time ./sorttest merge 20000 100 1 
 #+END_SRC
+
+** Todos:
+- [ ] support for repetitions (right now the reps arg doesn't matter)
+- [ ] support for verification of sorting (as an additional arg)
+- [ ] cleanup the mess 
 
 
 
