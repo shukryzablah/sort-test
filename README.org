@@ -10,25 +10,36 @@ gcc sorttest.c -o sorttest
 #+END_SRC
 
 Now we can do a test run. Let's run selection sort on a random array
-of 20 values ranging from 0 to 50 once.
+of 20 values ranging from 0 to 50 five times.
 
 #+BEGIN_SRC shell :results silent
-./sorttest selection 20 50 1
+./sorttest selection 20 50 5
 #+END_SRC
 
-Go ahead and try using the time command to get a rough estimate about
-how much slower selection sort is than merge sort for an array of
-20000 values.
+We already know that selection sort is slower than mergesort for large
+arrays. You can verify this empirically if you want to.
 
 #+BEGIN_SRC shell :results silent
-time ./sorttest selection 20000 100 1
-time ./sorttest merge 20000 100 1 
+time ./sorttest selection 2000 100 5
+time ./sorttest merge 2000 100 5
 #+END_SRC
 
-** Todos:
-- [ ] support for repetitions (right now the reps arg doesn't matter)
-- [ ] support for verification of sorting (as an additional arg)
-- [ ] cleanup the mess 
+Algorithms supported: 
+
+- bubble
+- counting
+- insertion
+- merge
+- quick
+- radix
+- selection
+
+
+** Todos [2/4]
+*** DONE add initial support for choosing algo, num values, and range
+*** DONE support for repetitions (right now the reps arg doesn't matter)
+*** TODO support for verification of sorting (as an additional arg)
+*** TODO  cleanup the mess 
 
 
 
