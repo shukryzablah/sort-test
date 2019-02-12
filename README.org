@@ -13,21 +13,24 @@ Now we can do a test run. Let's run selection sort on a random array
 of 20 values ranging from 0 to 50 five times.
 
 #+BEGIN_SRC shell :results silent
-./sorttest selection 20 50 5
+./sorttest selection 20 50 5 FALSE
 #+END_SRC
 
 We already know that selection sort is slower than mergesort for large
 arrays. You can verify this empirically if you want to.
 
 #+BEGIN_SRC shell :results silent
-time ./sorttest selection 2000 100 5
-time ./sorttest merge 2000 100 5
+time ./sorttest selection 2000 100 5 FALSE
+time ./sorttest merge 2000 100 5 FALSE
 #+END_SRC
+
+You can also change the last argument to TRUE in order to run
+verifications for each sort.
 
 Algorithms supported: 
 
 - bubble
-- counting
+- counting *not working*
 - insertion
 - merge
 - quick
@@ -35,11 +38,12 @@ Algorithms supported:
 - selection
 
 
-** Todos [2/4]
-*** DONE add initial support for choosing algo, num values, and range
-*** DONE support for repetitions (right now the reps arg doesn't matter)
-*** TODO support for verification of sorting (as an additional arg)
-*** TODO  cleanup the mess 
+** Todos [3/5]
+- [X] add initial support for choosing algo, num values, and range
+- [X] support for repetitions (right now the reps arg doesn't matter)
+- [X] support for verification of sorting (as an additional arg)
+- [ ] cleanup the mess 
+- [ ] fix counting sort seg fault
 
 
 
