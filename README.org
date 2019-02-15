@@ -1,51 +1,100 @@
-* Sort Test
+#+TITLE: Sort Test Draft
+#+AUTHOR: Shukry Zablah
+#+DATE: [2019-02-14 Thu]
 
-A command line utility to run a variety of sorting algorithms with a
-variety of options.
 
-To compile:
+* Sort Test (Performance Evaluation Project 1)
+** Sample Use
+We provide a command line utility to run a variety of sorting
+algorithms with a variety of options.
 
-#+BEGIN_SRC shell :results silent
-gcc sorttest.c -o sorttest
+To compile we use the following command: 
+
+#+BEGIN_SRC shell :results silent :exports both
+gcc sorttest.c -o sorttest -lrt
 #+END_SRC
 
-Now we can do a test run. Let's run selection sort on a random array
-of 20 values ranging from 0 to 50 five times.
+Note that we need to link the =librt.a= library when we compile a
+program that uses the ~clock_gettime~ function. 
 
-#+BEGIN_SRC shell :results silent
-./sorttest selection 20 50 5 FALSE
+Suppose we want to time the =merge_sort= algorithm on an array of 1000
+random values for values under ten thousand, and we want to repeat this 10 times. 
+
+We can run the compiled executable in the command line as follows: 
+
+#+BEGIN_SRC shell :results output :exports both
+./sorttest merge 1000 10000 10 TRUE
 #+END_SRC
 
-We already know that selection sort is slower than mergesort for large
-arrays. You can verify this empirically if you want to.
+#+RESULTS:
+#+begin_example
+merge,1000,10000,10,767956
+merge,1000,10000,10,592007
+merge,1000,10000,10,590447
+merge,1000,10000,10,653438
+merge,1000,10000,10,592456
+merge,1000,10000,10,590829
+merge,1000,10000,10,585376
+merge,1000,10000,10,588276
+merge,1000,10000,10,587927
+merge,1000,10000,10,579515
+Correctly Sorted: 10/10
+#+end_example
 
-#+BEGIN_SRC shell :results silent
-time ./sorttest selection 2000 100 5 FALSE
-time ./sorttest merge 2000 100 5 FALSE
+The program prints the algorithm, the length of the input, the range
+of the values, the number of repetitions, and the elapsed time in
+nanoseconds in that order. The output is in a csv format.
+
+We used the option TRUE in our command in order to run a function that
+verifies the array is sorted. Normally you would use the FALSE option
+to omit this step.
+
+In order to automate our data collection we create a small bash script
+called =driver.sh= that contains the commands we will run. (Remember
+to use ~chmod +x <file>~ to be able to execute scripts). 
+
+In order to create a csv file that contains all of our collected data
+we redirect the output of the program into the =test.csv= file.
+
+#+BEGIN_SRC shell :results silent :export both
+./driver.sh > test.csv
+#+END_SRC 
+
+After collecting our data we use an R script in order to generate a
+plot of the elapsed times. Again, we allow the script to be executable
+for convenience.
+
+#+BEGIN_SRC shell :results silent :export both
+./analyze.R
 #+END_SRC
 
-You can also change the last argument to TRUE in order to run
-verifications for each sort.
+Now we can check the current directory in order to retrive the image of our plot.
 
-Algorithms supported: 
+[[./sample.png]]
 
+Remember that we can change:
+- the sorttest.c file to change the behavior of the timing programs
+  and the way data is created
+- the driver.sh file to specify sorttest input to decide what data to collect
+- the analyze.R to create different plots and manipulate data
+
+** Supported Algorithms
 - bubble
-- counting *not working*
+- counting *not working currently*
 - insertion
 - merge
 - quick
 - radix
 - selection
-
-
-** Todos [3/5]
+** Todos [5/6]
 - [X] add initial support for choosing algo, num values, and range
 - [X] support for repetitions (right now the reps arg doesn't matter)
 - [X] support for verification of sorting (as an additional arg)
-- [ ] cleanup the mess 
-- [ ] fix counting sort seg fault
-
-
+- [X] use high precision methods (clock_gettime)
+- [X] update readme for sample workflow with bash and R
+- [ ] fix counting sort not working
+** Helpful Links
+https://www.cs.rutgers.edu/~pxk/416/notes/c-tutorials/gettime.html
 
 
 
