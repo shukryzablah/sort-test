@@ -1,6 +1,6 @@
 #+TITLE: Sort Test Draft
 #+AUTHOR: Shukry Zablah
-#+DATE: [2019-02-14 Thu]
+#+DATE: 2019-02-18 Thu
 
 
 * Sort Test (Performance Evaluation Project 1)
@@ -28,16 +28,16 @@ We can run the compiled executable in the command line as follows:
 
 #+RESULTS:
 #+begin_example
-merge,1000,10000,10,767956
-merge,1000,10000,10,592007
-merge,1000,10000,10,590447
-merge,1000,10000,10,653438
-merge,1000,10000,10,592456
-merge,1000,10000,10,590829
-merge,1000,10000,10,585376
-merge,1000,10000,10,588276
-merge,1000,10000,10,587927
-merge,1000,10000,10,579515
+merge,1000,10000,10,185112
+merge,1000,10000,10,135085
+merge,1000,10000,10,133641
+merge,1000,10000,10,133323
+merge,1000,10000,10,133160
+merge,1000,10000,10,133778
+merge,1000,10000,10,132964
+merge,1000,10000,10,133414
+merge,1000,10000,10,133394
+merge,1000,10000,10,133393
 Correctly Sorted: 10/10
 #+end_example
 
@@ -80,19 +80,21 @@ Remember that we can change:
 
 ** Supported Algorithms
 - bubble
-- counting *not working currently*
+- counting 
 - insertion
 - merge
 - quick
 - radix
 - selection
-** Todos [5/6]
+** Todos [6/8]
 - [X] add initial support for choosing algo, num values, and range
 - [X] support for repetitions (right now the reps arg doesn't matter)
 - [X] support for verification of sorting (as an additional arg)
 - [X] use high precision methods (clock_gettime)
 - [X] update readme for sample workflow with bash and R
-- [ ] fix counting sort not working
+- [X] fix counting sort not working
+- [ ] add more clever timing scheme
+- [ ] brainstorm possible timing setups
 ** Helpful Links
 https://www.cs.rutgers.edu/~pxk/416/notes/c-tutorials/gettime.html
 
