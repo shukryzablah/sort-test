@@ -1,0 +1,195 @@
+<html>
+
+  <head>
+    <title>Condor Cluster HOWTO</title>
+  </head>
+
+  <body>
+
+    <h1>Condor Cluster HOWTO</h1>
+
+    <p>
+      The following is a set of instructions on how to use the Amherst College Condor Cluster.  These are hardly comprehensive
+      notes!  Rather, they are merely instruction by example.  It will provide a few notes to go along with a simple executable and
+      set of scripts from which you can build soething more meaninful.
+    </p>
+
+    <hr></hr>
+
+    <h3>Basic Condor commands</h3>
+
+    <p>
+      Begin by logging into <tt>cluster0</tt>, which is the master machine for the cluster.  That is, it is the only machine from
+      which you can (and should) submit and control jobs.
+    </p>
+
+    <p>
+      If it is not already in your <tt>PATH</tt>, you must add the following directory to have the Condor commands available to you:
+    </p>
+
+    <blockquote>
+      <tt>/usr/local/condor/bin</tt>
+    </blockquote>
+
+    <p>
+      Once there, there are two basic commands that you need to know about:
+    </p>
+
+    <ol>
+      
+      <p>
+        <li>
+	  <tt>condor_status</tt>: This command will show you the state of the cluster.  There are two processors per machine, and
+	  you will see the load on each processor.  It's a good way to see if the cluster is busy, for how long jobs have been
+	  running, and whether or not a particular machine in the cluster is down.
+        </li>
+      </p>
+
+      <p>
+        <li>
+	  <tt>condor_q</tt>: Show the queue of Condor jobs.  It will list all of the jobs submitted, show you which ones are
+	  running, the order of their submission, the priority of each job, and (at the bottom) the total number in the queue.
+        </li>
+      </p>
+
+    </ol>
+
+    <p>
+      Make sure that these executables work before proceeding.
+    </p>
+
+    <hr></hr>
+
+    <h3>The files</h3>
+
+    <p>
+      Running programs under Condor requires a few support files.  At its most basic, you need only an executable file and a
+      <i>command file</i> to control the submission of jobs to the cluster.  However, the command file must contain all of the
+      command-line arguments (among other things) for a particular simulation.  Since those command-line arguments are likely to
+      change from one experimental run to the next, we will work with some supporting scripts that will automate the construction of
+      the command file for each job, thus enabling us to submit many jobs with a single script command.
+    </p>
+
+    <p>
+      We list here the files that are involved, and then go into a more detailed description of their roles:
+    </p>
+
+    <ul>
+
+	<p>
+      <li>
+	<tt>test.cc</tt>: Source code for the <b>test</b> program.  Look into it, and you'll find it's a very simple C++ program.
+	It merely takes an integer command-line argument (actually, it doesn't really need to be an integer) and prints that along
+	with the hostname of the machine on which it's running.  The output goes to <tt>stdout</tt>.
+      </li>
+    </p>
+
+    <p>
+      <li>
+	<tt>test-${HOSTTYPE}</tt>: The compiled <b>test</b> program, ready to run on the architecture named by ${HOSTTYPE}.  Note
+	that currently, we have both 32-bit (INTEL) and 64-bit (x86_64) x86 architectures in the cluster.
+      </li>
+    </p>
+
+    <p>
+      <li>
+        <tt>test-one.sh</tt>: A shell script that makes a single instance of <tt>test-${HOSTTYPE}</tt> run.  This script allows you
+        to simplify the gathering and passing of any command-line arguments or input files needed for the run.
+      </li>
+    </p>
+
+    <p>
+      <li>
+        <tt>test-all.sh</tt>: A shell script that submits a group of runs to Condor.  It calculates the parameters that will be
+        passed to <tt>test-one.sh</tt> for each run, constructs a Condor command file, and then calls <tt>condor_submit</tt> on that
+        command file, thus submitting the group of runs.
+      </li>
+    </p>
+
+  </ul>
+    
+    <hr></hr>
+
+    <h3>Using the example</h3>
+
+    <p>
+      First, try running <tt>test-one.sh</tt> by itself.  It's simple:
+    </p>
+
+    <blockquote>
+      <tt>./test-one.sh 5</tt>
+    </blockquote>
+
+    <p>
+      It will invoke the architecturally correct version of <tt>test-${HOSTTYPE}</tt>, and emit something like:
+    </p>
+    
+    <pre>
+(cluster0)$ ./test-one.sh 5
+..........................................................................................................................................................................................................................................................<br>
+Arbitrary int: 5
+    </pre>
+
+    <p>
+      Assuming that works, you can now try the script, as provided, in order to submit some jobs.  It should look something like
+      this:
+    </p>
+
+    <pre>
+(cluster0)$ ./test-all.sh
+Submitting job(s).................................................................................................... 
+Logging submit event(s).................................................................................................... 
+100 job(s) submitted to cluster 17999.
+    </pre>
+
+    <p>
+      If you look at your current directory, you should see that a new subdirectory, named <tt>results</tt>, has been created by the
+      script.  If you look in that directory, you will see the <tt>log</tt>, <tt>out</tt>, and <tt>err</tt> files -- one for each
+      job submitted.  (You can see, in the script, that <tt>test</tt> is run 100 times, with values from 0 to 99.  One results
+      subdirectory is created for each such run.)
+    </p>
+
+    <p>
+      If you use the <tt>condor_q</tt> command (and you may want to pipe its output through <tt>more</tt> or <tt>less</tt>), you
+      should see your jobs at the end of the queue.  Note that you can remove the jobs using the <tt>condor_rm</tt> command, like
+      so:
+    </p>
+
+    <blockquote>
+      <tt>condor_rm 17999</tt>
+    </blockquote>
+
+    <p>
+      In the example, the jobs were given a priority of 5, which is higher than the standard priority of 0.  Therefore, these jobs
+      should run as soon as some other process in the cluster finishes.  You may want to check the running times of the currently
+      active jobs, as they can sometimes run for many hours each, thus preventing your <tt>test</tt> jobs from getting through for a
+      while.  You can remove the jobs, or let them sit there for a while if you want to see the results come out in the results
+      files.
+    </p>
+
+    <hr>
+
+    <h3>A summary</h3>
+
+    <p>
+      That's about it.  This simple example gives you a framework.  You can extend it to submit jobs for runs over ranges of many
+      values.  It depends only on how much you want to change the submission script.  Note that you can go about the steps of
+      forming the command file and using the <tt>condor_submit</tt> command differently than I have here.  For example, you could
+      rewrite the submission script in Perl, if you prefer that over tcsh scripts.
+    </p>
+
+    <p>
+      Good luck!  Send questions if you get into trouble.
+    </p>
+
+    <hr></hr>
+
+    <address>
+      <a href="mailto:sfkaplan@cs.amherst.edu">Scott F. Kaplan</a>
+    </address>
+<!-- Created: Mon Jan 21 11:50:54 EST 2002 -->
+<!-- hhmts start -->
+Last modified: Wed Jul 11 14:23:46 EDT 2007
+<!-- hhmts end -->
+  </body>
+</html>
