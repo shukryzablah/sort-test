@@ -1,3 +1,6 @@
+// To compile:
+//   gcc -std=gnu11 -o sorttest sorttest.c
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,6 +47,7 @@ long diff_in_ns(struct timespec t1, struct timespec t2) {
 }
 
 int main(int argc, char *argv[]) {
+
   if(argc != 6) {
     printf("Usage: ./sorttest <algo_name> <arr_length> <arr_range> <num_reps> <verify?>\n");
     exit(1);
@@ -56,6 +60,8 @@ int main(int argc, char *argv[]) {
   char *verify = argv[5];
   int num_correct = 0;
   int arr[arr_length];
+
+  fprintf(stderr, "DEBUG: arr = %p\n", arr);
   
   srand(time(NULL));
   for(int i = 0; i < num_reps; i++) {
