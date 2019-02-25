@@ -1,5 +1,7 @@
-// To compile:
-//   gcc -std=gnu11 -o sorttest sorttest.c
+// To compile on most systems:
+//   $ gcc -std=gnu11 -o sorttest sorttest.c
+// To compile on the cluster:
+//   $ /opt/rh/devtoolset-7/root/usr/bin/gcc -O3 -std=gnu11 sorttest.c -o sorttest -lrt
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,7 +66,7 @@ int main(int argc, char *argv[]) {
   fprintf(stderr, "DEBUG: arr = %p\n", arr);
   
   srand(time(NULL));
-  for(int i = 0; i < num_reps; i++) {
+  for(int i = 1; i <= num_reps; i++) {
     for(int i = 0; i < arr_length; i++) {
       arr[i] = rand() % arr_range;
     }
@@ -98,7 +100,7 @@ int main(int argc, char *argv[]) {
 
     long diff = diff_in_ns(start, finish);
 
-    printf("%s,%d,%d,%d,%ld", algorithm, arr_length, arr_range, num_reps, diff);
+    printf("%s,%d,%d,%d,%ld", algorithm, arr_length, arr_range, i, diff);
     printf("\n");
     
     // Uncomment to print array post sorting

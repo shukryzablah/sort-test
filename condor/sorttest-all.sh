@@ -6,11 +6,10 @@ set baseDirectory        = `pwd`
 set baseResultsDirectory = ${baseDirectory}/results
 set commandPathname      = ${baseDirectory}/${taskName}.cmd
 
-#set algorithmList      = ( bubble counting insertion merge quick radix selection )
-set algorithmList      = ( counting quick )
-set lengthMin          = 100
-set lengthMax          = 500
-set lengthIncrement    = 100
+set algorithmList      = ( bubble counting insertion merge quick radix selection )
+set lengthMin          = 50
+set lengthMax          = 750
+set lengthIncrement    = 50
 set valueRangeMax      = 1000
 set iterations         = 5
 set verifySort         = FALSE
