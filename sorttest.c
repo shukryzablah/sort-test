@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     // printArray(arr, arr_length);
 
     struct timespec start, finish;
-    clock_gettime(CLOCK_MONOTONIC, &start);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
     
     if (strcmp(algorithm, "bubble") == 0) {
       bubble_sort(arr, arr_length);
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
       exit(1);
     }
 
-    clock_gettime(CLOCK_MONOTONIC, &finish);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &finish);
 
     long diff = diff_in_ns(start, finish);
 

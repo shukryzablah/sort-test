@@ -9,7 +9,7 @@ set commandPathname      = ${baseDirectory}/${taskName}.cmd
 set algorithmList      = ( bubble counting insertion merge quick radix selection )
 set lengthMin          = 50
 set lengthMax          = 750
-set lengthIncrement    = 50
+set lengthIncrement    = 100
 set valueRangeMax      = 1000
 set iterations         = 5
 set verifySort         = FALSE
@@ -63,7 +63,7 @@ foreach algorithm ( ${algorithmList} )
 end # foreach algorithm
 
 # Submit the job.
-#condor_submit ${commandPathname}
+condor_submit ${commandPathname}
 
 # Clean up.
 # rm ${commandPathname}
