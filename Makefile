@@ -6,6 +6,8 @@ SHELL = /bin/sh
 .SUFFIXES:
 .SUFFIXES: .c .o .h
 
+#this is the way to invoke gcc on the cluster
+#to use on your system, run 'make CC=gcc'
 CC = /opt/rh/devtoolset-7/root/usr/bin/gcc
   
 # compiler flags:
