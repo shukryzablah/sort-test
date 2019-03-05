@@ -1,7 +1,10 @@
-// To compile on most systems:
-//   $ gcc -std=gnu11 -o sorttest sorttest.c
-// To compile on the cluster:
-//   $ /opt/rh/devtoolset-7/root/usr/bin/gcc -O3 -std=gnu11 sorttest.c -o sorttest -lrt
+/*
+ * Performance evaluation and optimization project one
+ *
+ * To compile on the cluster, just run 'make'
+ * To compile on most other systems, run 'make CC=gcc'
+ */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -62,9 +65,42 @@ int main(int argc, char *argv[]) {
   char *verify = argv[5];
   int num_correct = 0;
   int arr[arr_length];
+  //create function pointers to cut down on if/else statements in the loop
+  void (*two_arg_sorting_alg)(int[], int) = bubble_sort;  //the two-arg sorting function to call (initialized arbitrarily)
+  void (*three_arg_sorting_alg)(int[], int, int) = quick_sort; //the three-arg sorting function to call (initialized arbitrarily)
+  int arg_two = arr_length; //the second argument to the sorting algorithm
+  int arg_three = -1; //the third argument to the sorting algorithm (if applicable)
+
 
   fprintf(stderr, "DEBUG: arr = %p\n", arr);
+
+
   
+  //decide on the sorting algorithm
+  if (strcmp(algorithm, "bubble") == 0) {
+    two_arg_sorting_alg = bubble_sort;
+  } else if (strcmp(algorithm, "counting") == 0) {
+    arg_three = arr_range;
+    three_arg_sorting_alg = counting_sort;
+  } else if (strcmp(algorithm, "insertion") == 0) {
+    two_arg_sorting_alg = insertion_sort;    
+  } else if (strcmp(algorithm, "merge") == 0) {
+    two_arg_sorting_alg = merge_sort;
+  } else if (strcmp(algorithm, "quick") == 0) {
+    arg_two = 0;
+    arg_three = arr_length - 1;
+    three_arg_sorting_alg = quick_sort;
+  } else if (strcmp(algorithm, "radix") == 0) {
+    two_arg_sorting_alg = radix_sort;
+  } else if (strcmp(algorithm, "selection") == 0) {
+    two_arg_sorting_alg = selection_sort;
+  } else {
+    printf("Sorting algorithm not supported.\n");
+    exit(1);
+  }
+
+
+  //run a series of tests for the chosen sorting algorithm
   srand(time(NULL));
   for(int i = 1; i <= num_reps; i++) {
     for(int i = 0; i < arr_length; i++) {
@@ -77,23 +113,10 @@ int main(int argc, char *argv[]) {
     struct timespec start, finish;
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
     
-    if (strcmp(algorithm, "bubble") == 0) {
-      bubble_sort(arr, arr_length);
-    } else if (strcmp(algorithm, "counting") == 0) {
-      counting_sort(arr, arr_length, arr_range);
-    } else if (strcmp(algorithm, "insertion") == 0) {
-      insertion_sort(arr, arr_length);    
-    } else if (strcmp(algorithm, "merge") == 0) {
-      merge_sort(arr, arr_length);
-    } else if (strcmp(algorithm, "quick") == 0) {
-      quick_sort(arr, 0, arr_length - 1);
-    } else if (strcmp(algorithm, "radix") == 0) {
-      radix_sort(arr, arr_length);
-    } else if (strcmp(algorithm, "selection") == 0) {
-      selection_sort(arr, arr_length);
+    if (arg_three < 0) {
+      two_arg_sorting_alg(arr, arg_two);
     } else {
-      printf("Sorting algorithm not supported.\n");
-      exit(1);
+      three_arg_sorting_alg(arr, arg_two, arg_three);
     }
 
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &finish);
