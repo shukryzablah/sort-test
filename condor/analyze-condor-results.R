@@ -5,8 +5,10 @@ library(ggplot2) # plotting
 library(readr) # work with csv files
 library(purrr) # mapping functions
 
+filename <- "results-with-initial-malloc"
+
 ## read the file and fixes column names
-runs <- read_csv("./results-all.out",
+runs <- read_csv(paste0("./", filename, ".out"),
                  col_names = c("algorithm", "length", "range", "iteration", "runtime", "envsize"))
 
 ## fix types e.g. iteration isn't continous it should be discrete
@@ -22,15 +24,15 @@ generate_iteration_runtime_plot <- function(len) {
         geom_boxplot() +
         geom_jitter(alpha = 0.1, size = 0.1) +
         labs(title = paste0("Runtime vs Iteration Number for Length ", len," (all envsize)"))
-    dir_name = "./plots/"
+    dir_name = "./plots/with-initial-malloc/"
     file_name = paste0("iteration_runtime_length", len, ".png")
     ggsave(paste0(dir_name, file_name))
 }
 
 ## walks all the lengths with the plot function above
 lens <- unique(runs$length) 
-lens %>%
-    walk(generate_iteration_runtime_plot) 
+#lens %>%
+ #   walk(generate_iteration_runtime_plot) 
 
 
 
