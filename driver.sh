@@ -1,44 +1,39 @@
 #!/bin/bash
 
-./sorttest bubble 100 100 5 FALSE
-./sorttest counting 100 100 5 FALSE
-./sorttest insertion 100 100 5 FALSE
-./sorttest merge 100 100 5 FALSE
-./sorttest quick 100 100 5 FALSE
-./sorttest radix 100 100 5 FALSE
-./sorttest selection 100 100 5 FALSE
-./sorttest bubble 200 100 5 FALSE
-./sorttest counting 200 100 5 FALSE
-./sorttest insertion 200 100 5 FALSE
-./sorttest merge 200 100 5 FALSE
-./sorttest quick 200 100 5 FALSE
-./sorttest radix 200 100 5 FALSE
-./sorttest selection 200 100 5 FALSE
-./sorttest bubble 300 100 5 FALSE
-./sorttest counting 300 100 5 FALSE
-./sorttest insertion 300 100 5 FALSE
-./sorttest merge 300 100 5 FALSE
-./sorttest quick 300 100 5 FALSE
-./sorttest radix 300 100 5 FALSE
-./sorttest selection 300 100 5 FALSE
-./sorttest bubble 400 100 5 FALSE
-./sorttest counting 400 100 5 FALSE
-./sorttest insertion 400 100 5 FALSE
-./sorttest merge 400 100 5 FALSE
-./sorttest quick 400 100 5 FALSE
-./sorttest radix 400 100 5 FALSE
-./sorttest selection 400 100 5 FALSE
-./sorttest bubble 500 100 5 FALSE
-./sorttest counting 500 100 5 FALSE
-./sorttest insertion 500 100 5 FALSE
-./sorttest merge 500 100 5 FALSE
-./sorttest quick 500 100 5 FALSE
-./sorttest radix 500 100 5 FALSE
-./sorttest selection 500 100 5 FALSE
-./sorttest bubble 1000 100 5 FALSE
-./sorttest counting 1000 100 5 FALSE
-./sorttest insertion 1000 100 5 FALSE
-./sorttest merge 1000 100 5 FALSE
-./sorttest quick 1000 100 5 FALSE
-./sorttest radix 1000 100 5 FALSE
-./sorttest selection 1000 100 5 FALSE
+
+if [ "$#" -ne 1 ]; then
+    echo "Illegal number of parameters"
+    echo "First parameter is mandatory. It represents the number of times to call malloc before running a sort test"
+    exit 1
+fi
+
+#for bash
+increment=100
+arr_length=100
+max_length=500
+#loop through the algorithms and run each one with various lengths
+for alg in "bubble" "counting" "insertion" "merge" "quick" "radix" "selection"
+do
+	arr_length=100
+	echo "Running ${alg}"
+	while [[ $arr_length -le $max_length ]]; do
+		./sorttest ${alg} ${arr_length} 100 5 FALSE ${1}
+		arr_length=$(( $arr_length + $increment )) 
+	done
+	./sorttest ${alg} 1000 100 5 FALSE ${1}
+done
+
+
+#for tcsh
+## #! /usr/bin/env tcsh
+#set algorithmList = ( bubble counting insertion merge quick radix selection )
+#
+#set increment = 100
+#set arr_length = 100
+#set max_length = 100
+#foreach algorithm ( ${algorithmList} )
+#	while(${arr_length} <= ${max_length})
+#		./sorttest ${algorithm} ${arr_length} 100 5 FALSE $argv[1]
+#	end
+#	#./sorttest ${algorithm} 1000 100 5 FALSE $argv[1]
+#end

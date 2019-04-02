@@ -31,8 +31,8 @@ generate_iteration_runtime_plot <- function(len) {
 
 ## walks all the lengths with the plot function above
 lens <- unique(runs$length) 
-#lens %>%
- #   walk(generate_iteration_runtime_plot) 
+lens %>%
+   walk(generate_iteration_runtime_plot) 
 
 
 
